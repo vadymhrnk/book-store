@@ -1,6 +1,5 @@
 package com.example.bookstore.repository.impl;
 
-import com.example.bookstore.exception.EntityNotFoundException;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.repository.BookRepository;
 import java.util.List;
