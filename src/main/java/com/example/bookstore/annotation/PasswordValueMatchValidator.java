@@ -14,10 +14,6 @@ public class PasswordValueMatchValidator
         String passwordValue = requestDto.getPassword();
         String repeatPasswordValue = requestDto.getRepeatPassword();
 
-        if (passwordValue != null) {
-            return passwordValue.equals(repeatPasswordValue);
-        } else {
-            return repeatPasswordValue == null;
-        }
+        return passwordValue != null && passwordValue.equals(repeatPasswordValue);
     }
 }
