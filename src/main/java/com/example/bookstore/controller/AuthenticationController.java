@@ -1,8 +1,11 @@
 package com.example.bookstore.controller;
 
+import com.example.bookstore.dto.UserLoginRequestDto;
+import com.example.bookstore.dto.UserLoginResponseDto;
 import com.example.bookstore.dto.UserRegistrationRequestDto;
 import com.example.bookstore.dto.UserResponseDto;
 import com.example.bookstore.exception.RegistrationException;
+import com.example.bookstore.secrity.AuthenticationService;
 import com.example.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
@@ -28,5 +32,14 @@ public class AuthenticationController {
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);
+    }
+
+    @PostMapping("/login")
+    @Operation(
+            summary = "Login using existing credentials",
+            description = "Login using existing credentials"
+    )
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
+        return authenticationService.authenticate(requestDto);
     }
 }
