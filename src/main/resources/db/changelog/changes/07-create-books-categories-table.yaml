@@ -10,7 +10,6 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
-                    nullable: false
                     deleteCascade: true
                     primaryKey: true
                     foreignKeyName: book_foreignKey
@@ -19,7 +18,6 @@ databaseChangeLog:
                   name: category_id
                   type: bigint
                   constraints:
-                    nullable: false
                     deleteCascade: true
                     primaryKey: true
                     foreignKeyName: category_foreignKey
