@@ -55,7 +55,7 @@ public class Order {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    enum Status {
+    public enum Status {
         COMPLETED,
         PENDING,
         DELIVERED
