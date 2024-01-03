@@ -34,7 +34,7 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add book to cart", description = "Add book to cart")
     public ShoppingCartDto addBookToCart(
-            @RequestBody AddCartItemRequestDto requestDto,
+            @RequestBody @Valid AddCartItemRequestDto requestDto,
             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.addBookToCart(requestDto, user.getId());
