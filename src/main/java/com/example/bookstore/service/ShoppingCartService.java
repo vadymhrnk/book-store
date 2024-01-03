@@ -12,7 +12,7 @@ public interface ShoppingCartService {
     ShoppingCartDto updateQuantity(
             Long userId,
             UpdateCartItemQuantityRequestDto requestDto,
-            Long id
+            Long cartItemId
     );
 
     void deleteById(Long id);
