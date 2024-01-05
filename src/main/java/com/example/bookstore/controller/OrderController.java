@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -44,9 +45,9 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping
     @Operation(summary = "Get user's order history", description = "Get user's order history")
-    public List<OrderDto> getOrderHistory(Authentication authentication) {
+    public List<OrderDto> getOrderHistory(Authentication authentication, Pageable pageable) {
         User user = (User) authentication.getPrincipal();
-        return orderService.getOrderHistory(user.getId());
+        return orderService.getOrderHistory(user.getId(), pageable);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -67,10 +68,11 @@ public class OrderController {
     )
     public List<OrderItemDto> getOrderItems(
             Authentication authentication,
-            @PathVariable(name = "order-id") Long orderId
+            @PathVariable(name = "order-id") Long orderId,
+            Pageable pageable
     ) {
         User user = (User) authentication.getPrincipal();
-        return orderService.getOrderItems(user.getId(), orderId);
+        return orderService.getOrderItems(user.getId(), orderId, pageable);
     }
 
     @PreAuthorize("hasRole('USER')")

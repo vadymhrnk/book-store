@@ -18,7 +18,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     references: users(id)
-                    foreignKeyName: orders-user_foreignKey
+                    foreignKeyName: orders_user_id_foreignKey
               - column:
                   name: status
                   type: varchar(255)
