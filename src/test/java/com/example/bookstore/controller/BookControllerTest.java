@@ -47,7 +47,7 @@ class BookControllerTest {
 
     @WithMockUser(username = "admin", roles = "ADMIN")
     @Test
-    public void getBookById() throws Exception {
+    public void getAll_ValidBooks_Successful() throws Exception {
         MvcResult result = mockMvc.perform(
                         get("/api/books").contentType(MediaType.APPLICATION_JSON)
                 )
