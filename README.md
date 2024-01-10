@@ -3,6 +3,30 @@
 Welcome to the Online Book Store App project! This project is aimed to create a web application for an online book store.  
 This README.md file provides an overview of the project, its purpose, and the entities involved.
 
+## Getting Started
+
+To run the project locally, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/vadymhrnk/book-store
+   ```
+2. Download [JDK](https://www.oracle.com/java/technologies/downloads/), [Apache Maven](https://maven.apache.org/download.cgi) and [Docker](https://docs.docker.com/get-docker/)
+3. Build and run the project using:
+   ```bash
+   mvn clean spring-boot:run 
+   ```
+
+## Technologies Used
+
+  - Java
+  - Docker
+  - Spring Boot
+  - Spring Security
+  - Spring Data JPA
+  - Swagger (for API documentation)
+  - MySQL
+
 ## Roles in Application
 
 ### Client (User)
