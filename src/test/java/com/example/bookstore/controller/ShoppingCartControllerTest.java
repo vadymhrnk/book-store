@@ -1,15 +1,17 @@
 package com.example.bookstore.controller;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.bookstore.dto.CartItemDto;
 import com.example.bookstore.dto.ShoppingCartDto;
 import com.example.bookstore.model.Role;
 import com.example.bookstore.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,10 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ShoppingCartControllerTest {
     protected static MockMvc mockMvc;
+
+    private static ShoppingCartDto shoppingCartDto;
+    private static CartItemDto cartItemDto;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -56,6 +62,17 @@ class ShoppingCartControllerTest {
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
+
+        cartItemDto = new CartItemDto();
+        cartItemDto.setId(1L);
+        cartItemDto.setBookId(1L);
+        cartItemDto.setBookTitle("Java 23");
+        cartItemDto.setQuantity(3);
+
+        shoppingCartDto = new ShoppingCartDto();
+        shoppingCartDto.setId(1L);
+        shoppingCartDto.setUserId(1L);
+        shoppingCartDto.setCartItems(Set.of(cartItemDto));
     }
 
     @BeforeEach
@@ -85,11 +102,13 @@ class ShoppingCartControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        ShoppingCartDto expected = shoppingCartDto;
+
         ShoppingCartDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 ShoppingCartDto.class
         );
 
-        Assertions.assertEquals(1, actual.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
     }
 }

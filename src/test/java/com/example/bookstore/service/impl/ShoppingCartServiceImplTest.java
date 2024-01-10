@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,6 +29,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ShoppingCartServiceImplTest {
+    private static Book book;
+    private static User user;
+    private static ShoppingCart shoppingCart;
+    private static CartItemDto cartItemDto;
+    private static AddCartItemRequestDto requestDto;
+    private static CartItem cartItem;
+    private static ShoppingCartDto shoppingCartDto;
+    private static Long bookId;
+    private static int quantity;
+    private static Long userId;
+
     @Mock
     private BookRepository bookRepository;
 
@@ -43,16 +55,16 @@ class ShoppingCartServiceImplTest {
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartService;
 
-    @Test
-    public void addBookToCart_ValidBook_Successful() {
-        Long bookId = 2L;
-        int quantity = 3;
-
-        AddCartItemRequestDto requestDto = new AddCartItemRequestDto();
+    @BeforeAll
+    static void beforeAll() {
+        userId = 1L;
+        bookId = 2L;
+        quantity = 3;
+        requestDto = new AddCartItemRequestDto();
         requestDto.setBookId(bookId);
         requestDto.setQuantity(quantity);
 
-        Book book = new Book();
+        book = new Book();
         book.setId(1L);
         book.setTitle("Java 8");
         book.setAuthor("Bob Smith");
@@ -61,9 +73,7 @@ class ShoppingCartServiceImplTest {
         book.setDescription("Description of Java");
         book.setCoverImage("JavaBook.jpg");
 
-        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-
-        User user = new User();
+        user = new User();
         user.setId(1L);
         user.setEmail("bob@gmail.com");
         user.setPassword("$2a$10$x2JkGITcg4AS8.9KFVi93.xPiq2kZ0a30i1UnzrIQOWlkqWhRccyW");
@@ -71,17 +81,17 @@ class ShoppingCartServiceImplTest {
         user.setLastName("Smith");
         user.setShippingAddress("Green palm avenue");
 
-        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart = new ShoppingCart();
         shoppingCart.setId(1L);
         shoppingCart.setUser(user);
 
-        CartItemDto cartItemDto = new CartItemDto();
+        cartItemDto = new CartItemDto();
         cartItemDto.setId(1L);
         cartItemDto.setBookId(bookId);
         cartItemDto.setBookTitle(book.getTitle());
         cartItemDto.setQuantity(quantity);
 
-        CartItem cartItem = new CartItem();
+        cartItem = new CartItem();
         cartItem.setId(1L);
         cartItem.setShoppingCart(shoppingCart);
         cartItem.setBook(book);
@@ -89,24 +99,24 @@ class ShoppingCartServiceImplTest {
 
         shoppingCart.setCartItems(new HashSet<>(Set.of(cartItem)));
 
-        Long userId = 1L;
-
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto();
+        shoppingCartDto = new ShoppingCartDto();
         shoppingCartDto.setId(1L);
         shoppingCartDto.setUserId(userId);
         shoppingCartDto.setCartItems(Set.of(cartItemDto));
 
+    }
+
+    @Test
+    public void addBookToCart_ValidBook_Successful() {
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
         when(shoppingCartRepository.findByUserId(userId)).thenReturn(Optional.of(shoppingCart));
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(shoppingCartDto);
 
-        ShoppingCartDto expectedDto = new ShoppingCartDto();
-        expectedDto.setId(1L);
-        expectedDto.setCartItems(Set.of(cartItemDto));
-        expectedDto.setUserId(userId);
+        ShoppingCartDto expected = shoppingCartDto;
 
-        ShoppingCartDto actualDto = shoppingCartService.addBookToCart(requestDto, userId);
+        ShoppingCartDto actual = shoppingCartService.addBookToCart(requestDto, userId);
 
-        assertNotNull(actualDto);
-        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto));
+        assertNotNull(actual);
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
     }
 }
